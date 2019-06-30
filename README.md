@@ -1,7 +1,7 @@
 # bamazon
 UW-Extension Boot Camp Week 12 Homework
 
-Purpose: Learn to work with Node.js, MySQL, npm packages (particularly MySQL and Inquirer).
+Purpose: Learn to work with Node.js, MySQL, npm packages (particularly MySQL and Inquirer). Also I put some work on inputs validation.
 
 This is a storefront command line app. If you wish to clone and run it, you will have to:
 * run 'npm install' to get MySQL and Inquirer packages
@@ -12,6 +12,10 @@ App has few modules with different functionality:
 * If you wish to play shopper - run 'node bamazonCustomer.js' in your terminal. Follow the prompt.
 See it alive:
 
+https://drive.google.com/file/d/1C3QgQ5g77cophELYPywN8J8-IqUx7Yku/view
+
 
 * If you wish to play manager - run 'node bamazonManager.js' in your terminal. Follow the prompt.
 See it alive:
+
+https://drive.google.com/file/d/1bCl0nqQHw6ChsN1hYEzKNY2zPzlzCci7/view
