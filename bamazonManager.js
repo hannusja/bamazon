@@ -15,17 +15,18 @@ function startwork(){
     connection.connect(function(err) {
         if (err) throw err
         console.log("connected as id " + connection.threadId+ "\n")
-        connection.query("SELECT item_id FROM products", function(err, res) {
-            if (err) throw err
-            for (var i=0; i<res.length; i++){
-                idArray.push(res[i].item_id)
-            }
-        }) 
         showMenu()
     }) 
 }
 
 function showMenu (){
+    connection.query("SELECT item_id FROM products", function(err, res) {
+        if (err) throw err
+        idArray=[]
+        for (var i=0; i<res.length; i++){
+            idArray.push(res[i].item_id)
+        }
+    }) 
     inquirer.prompt([
     {
         type: "list",
@@ -137,7 +138,6 @@ function addInventory(){
                 ],
                 function (err,res){
                     if (err) throw err
-                    console.log(res)
                     console.log("Inventory updated.\n")
                     continueWork()
                 }
@@ -147,7 +147,90 @@ function addInventory(){
 }
 
 function addNew(){
-
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "id",
+            message: "Please type the id number of the new product\n",
+            validate: function(value) {
+                if(!isNaN(value)&&idArray.indexOf(parseFloat(value))==-1)
+                {
+                    return true
+                }
+                else {
+                    return "Please type the id number! Do not repeat existing id!"
+                }
+            }
+        },
+        {
+            type: "input",
+            name: "product",
+            message: "Please type the name of the new product\n",
+            validate: function(value) {
+                if(value.match(/[a-zA-Z][a-zA-Z ]+[a-zA-Z]$/))
+                {
+                    return true
+                }
+                else {
+                    return "Please type name of the product! Use letters!"
+                }
+            }
+        },
+        {
+            type: "input",
+            name: "department",
+            message: "Please type the department name of the new product\n",
+            validate: function(value) {
+                if(value.match(/[a-zA-Z][a-zA-Z ]+[a-zA-Z]$/))
+                {
+                    return true
+                }
+                else {
+                    return "Please type name of the department! Use letters!"
+                }
+            }
+        },
+        {
+            type: "input",
+            name: "price",
+            message: "Please type the price the new product",
+            validate: function(value) {
+                if(!isNaN(value)){
+                    return true
+                }
+                else {
+                    return "Please type number!"
+                }  
+            }
+        },
+        {
+            type: "input",
+            name: "quantity",
+            message: "Please type the quantity the new product",
+            validate: function(value) {
+                if(!isNaN(value)){
+                    return true
+                }
+                else {
+                    return "Please type number!"
+                }  
+            }
+        }
+    ]).then(function (answers) {
+        connection.query( "INSERT INTO products SET ?",
+        {
+            item_id: answers.id,
+            product_name: answers.product.toLowerCase(),
+            department_name: answers.department.toLowerCase(),
+            price: answers.price,
+            stock_quantity: answers.quantity
+        },
+        function (err,res){
+            console.log("New product added!\n")
+            continueWork()
+        }
+        )
+    })
 }
 
 function continueWork(){

@@ -4,6 +4,7 @@ var inquirer = require("inquirer")
 var chosenProduct
 var new_quantity
 var total
+var idArray=[]
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -17,6 +18,12 @@ function newOrder(){
     connection.connect(function(err) {
         if (err) throw err
         console.log("connected as id " + connection.threadId+ "\n")
+        connection.query("SELECT item_id FROM products", function(err, res) {
+            if (err) throw err
+            for (var i=0; i<res.length; i++){
+                idArray.push(res[i].item_id)
+            }
+        })
         showstock()
     }) 
 }
@@ -44,7 +51,7 @@ function orderForm(){
             name: "id",
             message: "Please type the id number of the product you wish to buy\n",
             validate: function(value) {
-                if(value<11&&value>0){
+                if(idArray.indexOf(parseFloat(value))>-1){
                     return true
                 }
                 else {
