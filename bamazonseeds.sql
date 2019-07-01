@@ -27,3 +27,15 @@ VALUES (9, "pin", "sewing", 1, 150);
 
 INSERT INTO products (item_id, product_name, department_name, price, stock_quantity)
 VALUES (10, "belt buckle", "sewing", 18, 5);
+
+INSERT INTO departments (department_id, department_name, over_head_costs)
+VALUES (1, "footwear", 10000);
+
+INSERT INTO departments (department_id, department_name, over_head_costs)
+VALUES (2, "hosiery", 10000);
+
+INSERT INTO departments (department_id, department_name, over_head_costs)
+VALUES (3, "apparel", 10000);
+
+INSERT INTO departments (department_id, department_name, over_head_costs)
+VALUES (4, "sewing", 1000);

@@ -39,13 +39,13 @@ function showMenu (){
         switch(answers.doThis){
             case "View Products for Sale":
                 viewSale()
-                break;
+            break;
             case "View Low Inventory":
                 viewLow()
-                break;
+            break;
             case "Add to Inventory":
                 addInventory()
-                break;
+            break;
             case "Add New Product":
                 addNew()
             break

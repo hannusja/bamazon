@@ -4,6 +4,7 @@ var inquirer = require("inquirer")
 var chosenProduct
 var new_quantity
 var total
+var totalsale
 var idArray=[]
 
 var connection = mysql.createConnection({
@@ -74,7 +75,7 @@ function orderForm(){
         }
     ]).then(function (answers) {
         chosenProduct = answers.id
-        connection.query("SELECT price, stock_quantity FROM products WHERE ?",
+        connection.query("SELECT price, stock_quantity, product_sales FROM products WHERE ?",
         [
             {
                 item_id: answers.id
@@ -85,6 +86,7 @@ function orderForm(){
             if(res[0].stock_quantity >= parseFloat(answers.quantity)){
                 new_quantity = res[0].stock_quantity-parseFloat(answers.quantity)
                 total = parseFloat(answers.quantity)*res[0].price
+                totalsale = res[0].product_sales + total
                 completeSale()
             }
             else{
@@ -101,7 +103,8 @@ function completeSale(){
         "UPDATE products SET ? WHERE ?",
         [
             {
-                stock_quantity: new_quantity
+                stock_quantity: new_quantity,
+                product_sales: totalsale
             },
             {
                 item_id: chosenProduct
