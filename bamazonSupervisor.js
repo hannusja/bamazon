@@ -16,7 +16,9 @@ function startwork(){
     connection.connect(function(err) {
         if (err) throw err
         console.log("connected as id " + connection.threadId+ "\n")
-        showMenu()
+        //showMenu()
+        var result = getSales("footwear")
+        console.log(result)
     }) 
 }
 
@@ -48,6 +50,8 @@ function showMenu (){
     })
 }
 
+
+
 function viewSales(){
     connection.query("SELECT * FROM departments", function(err, res) {
         if (err) throw err
@@ -57,11 +61,11 @@ function viewSales(){
         })
         for (var i=0; i<res.length; i++){
             table.push(
-                [res[i].department_id, res[i].department_name, res[i].over_head_costs]
+                [res[i].department_id, res[i].department_name, res[i].over_head_costs, getSales(res[i].department_name)]
             )
         }
         console.log(table.toString())
-        continueWork()
+      continueWork()
     }) 
 }
 
@@ -119,6 +123,22 @@ function createDep(){
             console.log("New department added!\n")
             continueWork()
         })
+    })
+}
+
+
+function getSales(dep){
+    
+    connection.query("SELECT department_name, SUM (product_sales) FROM products GROUP BY department_name", function (err, res) {
+        if (err) throw err
+        for (var i=0; i<res.length; i++){ 
+            if (res[i].department_name==dep){
+               var depRow=Object.values(res[i])
+            }
+        }
+        var sale=depRow[1]
+        console.log(sale)
+        return sale
     })
 }
 
