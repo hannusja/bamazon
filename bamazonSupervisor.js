@@ -4,6 +4,7 @@ var Table = require("cli-table")
 
 var idArray=[]
 var saleResponse
+var depFromProd=[]
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -53,6 +54,9 @@ function getSales(){
     connection.query("SELECT department_name, SUM (product_sales) FROM products GROUP BY department_name", function (err, response) {
         if (err) throw err
         saleResponse=response
+        for (var i=0; i<saleResponse.length; i++){
+            depFromProd.push(saleResponse[i].department_name)
+        }
         viewSales()
     })
 }
@@ -65,11 +69,16 @@ function viewSales(){
             head: ['department_id', 'department_name', 'over_head_costs', 'product_sales','total_profit']
         })
         for (var i=0; i<res.length; i++){
-            for (var k=0; k<saleResponse.length; k++){ 
-                if (saleResponse[k].department_name==res[i].department_name){
-                    var depRow=Object.values(saleResponse[k])
-                    var product_sales=depRow[1]
+            if (depFromProd.indexOf(res[i].department_name)>-1){
+                for (var k=0; k<saleResponse.length; k++){
+                    if (saleResponse[k].department_name==res[i].department_name){
+                        var depRow=Object.values(saleResponse[k])
+                        var product_sales=depRow[1]    
+                    }
                 }
+            }
+            else {
+                product_sales=0
             }
             var total_profit = product_sales - res[i].over_head_costs
             table.push(

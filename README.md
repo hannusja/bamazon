@@ -19,3 +19,9 @@ https://drive.google.com/file/d/1C3QgQ5g77cophELYPywN8J8-IqUx7Yku/view
 See it alive:
 
 https://drive.google.com/file/d/1bCl0nqQHw6ChsN1hYEzKNY2zPzlzCci7/view
+
+
+* If you wish to play supervisor - run 'node bamazonSupervisor.js' in your terminal. Follow the prompt.
+See it alive:
+
+https://drive.google.com/file/d/1uTWKoa-DOtjPSt980-wSvH4Ttkn13adb/view
