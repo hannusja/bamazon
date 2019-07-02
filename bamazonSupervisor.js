@@ -3,6 +3,7 @@ var inquirer = require("inquirer")
 var Table = require("cli-table")
 
 var idArray=[]
+var saleResponse
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -16,9 +17,7 @@ function startwork(){
     connection.connect(function(err) {
         if (err) throw err
         console.log("connected as id " + connection.threadId+ "\n")
-        //showMenu()
-        var result = getSales("footwear")
-        console.log(result)
+        showMenu()
     }) 
 }
 
@@ -41,7 +40,7 @@ function showMenu (){
     .then(function (answers) {
         switch(answers.doThis){
             case "View Product Sales by Department":
-                viewSales()
+                getSales()
             break;
             case "Create New Department":
                 createDep()
@@ -50,7 +49,13 @@ function showMenu (){
     })
 }
 
-
+function getSales(){
+    connection.query("SELECT department_name, SUM (product_sales) FROM products GROUP BY department_name", function (err, response) {
+        if (err) throw err
+        saleResponse=response
+        viewSales()
+    })
+}
 
 function viewSales(){
     connection.query("SELECT * FROM departments", function(err, res) {
@@ -60,8 +65,15 @@ function viewSales(){
             head: ['department_id', 'department_name', 'over_head_costs', 'product_sales','total_profit']
         })
         for (var i=0; i<res.length; i++){
+            for (var k=0; k<saleResponse.length; k++){ 
+                if (saleResponse[k].department_name==res[i].department_name){
+                    var depRow=Object.values(saleResponse[k])
+                    var product_sales=depRow[1]
+                }
+            }
+            var total_profit = product_sales - res[i].over_head_costs
             table.push(
-                [res[i].department_id, res[i].department_name, res[i].over_head_costs, getSales(res[i].department_name)]
+                [res[i].department_id, res[i].department_name, res[i].over_head_costs, product_sales, total_profit]
             )
         }
         console.log(table.toString())
@@ -123,22 +135,6 @@ function createDep(){
             console.log("New department added!\n")
             continueWork()
         })
-    })
-}
-
-
-function getSales(dep){
-    
-    connection.query("SELECT department_name, SUM (product_sales) FROM products GROUP BY department_name", function (err, res) {
-        if (err) throw err
-        for (var i=0; i<res.length; i++){ 
-            if (res[i].department_name==dep){
-               var depRow=Object.values(res[i])
-            }
-        }
-        var sale=depRow[1]
-        console.log(sale)
-        return sale
     })
 }
 
