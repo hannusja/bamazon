@@ -2,6 +2,7 @@ var mysql = require("mysql")
 var inquirer = require("inquirer")
 
 var idArray=[]
+var depArray=[]
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -47,7 +48,7 @@ function showMenu (){
                 addInventory()
             break;
             case "Add New Product":
-                addNew()
+                getDepartments()
             break
         }
     })
@@ -146,6 +147,18 @@ function addInventory(){
     })
 }
 
+function getDepartments(){
+    connection.query("SELECT department_name FROM departments", function(err, res) {
+        if (err) throw err
+        depArray=[]
+        for (var i=0; i<res.length; i++){
+            depArray.push(res[i].department_name)
+        }
+        addNew()
+    }) 
+}
+
+
 function addNew(){
     inquirer.prompt([
         {
@@ -177,18 +190,10 @@ function addNew(){
             }
         },
         {
-            type: "input",
+            type: "list",
             name: "department",
-            message: "Please type the department name of the new product\n",
-            validate: function(value) {
-                if(value.match(/[a-zA-Z][a-zA-Z ]+[a-zA-Z]$/))
-                {
-                    return true
-                }
-                else {
-                    return "Please type name of the department! Use letters!"
-                }
-            }
+            message: "What department does this product belongs to?\n",
+            choices: depArray
         },
         {
             type: "input",
@@ -221,9 +226,10 @@ function addNew(){
         {
             item_id: answers.id,
             product_name: answers.product.toLowerCase(),
-            department_name: answers.department.toLowerCase(),
+            department_name: answers.department,
             price: answers.price,
-            stock_quantity: answers.quantity
+            stock_quantity: answers.quantity,
+            product_sales: 0
         },
         function (err,res){
             console.log("New product added!\n")

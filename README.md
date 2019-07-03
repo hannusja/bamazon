@@ -18,7 +18,7 @@ https://drive.google.com/file/d/1C3QgQ5g77cophELYPywN8J8-IqUx7Yku/view
 * If you wish to play manager - run 'node bamazonManager.js' in your terminal. Follow the prompt.
 See it alive:
 
-https://drive.google.com/file/d/1bCl0nqQHw6ChsN1hYEzKNY2zPzlzCci7/view
+https://drive.google.com/file/d/1IdhzsJ1ty5uTVD7l0_4PVVuoy7vi82BN/view
 
 
 * If you wish to play supervisor - run 'node bamazonSupervisor.js' in your terminal. Follow the prompt.
